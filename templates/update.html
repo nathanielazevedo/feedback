@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 
 {% block title %}
-Add Feedback
+Update Feeback
 {% endblock %}
 
 {% block content %}
 
-<h1>Add Feedback</h1>
+<h1>Edit Feedback</h1>
 <form method="POST">
 
   {{form.hidden_tag()}}
@@ -32,7 +32,7 @@ Add Feedback
 
   {% endfor %}
 
-  <button class="btn btn-info">Add Feedback</button>
+  <button class="btn btn-info" action='/feedback/{{feedback.id}}/update'>Edit Feedback</button>
 </form>
 
 {% endblock %}

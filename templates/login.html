@@ -6,7 +6,7 @@ Create User
 
 {% block content %}
 
-<h1>Login a user</h1>
+<h1 class="mt-5">Login a user</h1>
 <form method="POST">
 
   {{form.hidden_tag()}}
@@ -32,7 +32,13 @@ Create User
 
   {% endfor %}
 
-  <button class="btn btn-primary">Login!</button>
+  <button class="btn btn-info">Login!</button>
+</form>
+
+<form action="/register">
+  <button class="btn btn-info mt-4" method='GET'>
+    Register
+  </button>
 </form>
 
 {% endblock %}

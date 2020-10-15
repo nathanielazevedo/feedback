@@ -4,7 +4,7 @@ from flask import Flask, render_template, redirect, session
 from flask_debugtoolbar import DebugToolbarExtension
 from werkzeug.exceptions import Unauthorized
 from models import connect_db, db, User, Feedback
-from forms import RegisterForm, LoginForm, FeedBackForm
+from forms import RegisterForm, LoginForm, FeedBackForm, UpdateFeedBackForm
 
 app = Flask(__name__)
 
@@ -156,10 +156,58 @@ def feedbac_form(username):
 
 # Just started this
 
-@app.route("/users/<feedback_id>/update", methods={'GET', 'POST'})
-def feedbac_form(username):
+@app.route("/feedback/<feedback_id>/update", methods={'GET', 'POST'})
+def update_feedback(feedback_id):
+
+
+
+    feedback = Feedback.query.get_or_404(feedback_id)
     
-    if "username" not in session or username != session['username']:
+    if "username" not in session or feedback.username != session['username']:
         raise Unauthorized()
 
 
+
+    form = UpdateFeedBackForm(obj=feedback)
+
+
+    if form.validate_on_submit():
+        
+        feedback.title = form.title.data
+        feedback.content = form.content.data
+
+        db.session.add(feedback)
+        db.session.commit()
+        
+        return redirect(f"/users/{feedback.username}")
+
+
+    else:
+        return render_template('update.html', feedback=feedback, form=form)
+
+
+
+@app.route("/feedback/<int:feedback_id>/delete", methods=["POST"])
+def delete_feedback(feedback_id):
+    """Delete feedback."""
+
+    feedback = Feedback.query.get(feedback_id)
+    
+
+    if "username" not in session or feedback.username != session['username']:
+        raise Unauthorized()
+        
+
+    feedback = Feedback.query.get(feedback_id)
+    
+    db.session.delete(feedback)
+    db.session.commit()
+
+    return redirect(f"/users/{feedback.username}")
+
+
+
+
+
+
+        
